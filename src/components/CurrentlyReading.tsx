@@ -34,7 +34,7 @@ export const CurrentlyReading = ({
 
         return (
           <>
-            <Word key={`w-${charIndex}`} highlighted={isCurrent} content={word} />
+            <Word key={`w-${charIndex}`} highlighted={isCurrent} data-testid={isCurrent ? "current-word" : ""} content={word} />
           </>
         )
       })}
