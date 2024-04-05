@@ -10,7 +10,6 @@ const fetchContent = async (url = API_URL): Promise<string> => {
         const res = await fetch(API_URL);
         if (res.ok) {
             const text = await res.text();
-            console.log({text})
             return text;
         }
 

@@ -16,5 +16,62 @@ export const CurrentlyReading = ({
   currentSentenceIdx: number;
   sentences: string[];
 }) => {
-  return <div data-testid="currently-reading"></div>;
+
+  const isCurrentWord = (word: string) => {
+    const wordIndex = sentences?.[currentSentenceIdx]?.indexOf(word);
+    const wordIsBetweenCurrentWordRange = wordIndex >= currentWordRange[0] && wordIndex < currentWordRange[1];
+    return wordIsBetweenCurrentWordRange;
+  }
+
+  return <div data-testid="currently-reading" className="currently-reading">
+    <p
+      data-testid="current-sentence"
+      className="currently-reading-text"
+    >
+      {sentences?.[currentSentenceIdx]?.split(" ").map((word, wordIndex) => {
+        const isCurrent = isCurrentWord(word);
+
+        return (
+          <>
+            <Word key={`w-${wordIndex}`} highlighted={isCurrent} content={word} />
+            {" "}
+          </>
+        )
+      })}
+      <br /><br />
+    </p>
+
+    {sentences.map((sentence, index) => (
+      <p
+        key={`p-${index}`}
+        data-testid={index === currentSentenceIdx ? "current-sentence" : ""}
+      >
+
+        {sentence.split(" ").map((word, wordIndex) => {
+          // const wordIsBetweenCurrentWordRange = wordIndex >= currentWordRange[0] && wordIndex < currentWordRange[1];
+          // const wordIsInCurrentSentence = index === currentSentenceIdx;
+          // const wordIsTheCurrentWord = wordIsInCurrentSentence && wordIsBetweenCurrentWordRange;
+
+          return (
+            <>
+              <Word key={`w-${wordIndex}`} highlighted={false} content={word} />
+              {" "}
+            </>
+          )
+        })}
+      </p>
+    ))}
+    <br />
+  </div>;
+};
+
+function Word({ content, highlighted }: { highlighted: boolean, content: string }): JSX.Element {
+  return (
+    <span
+      data-testid={highlighted ? "current-word" : ""}
+      className={highlighted ? "currentword" : ""}
+    >
+      {content}
+    </span>
+  );
 };

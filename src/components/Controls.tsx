@@ -1,3 +1,5 @@
+import React from 'react';
+
 import { PlayingState } from '../lib/speech';
 
 /*
@@ -11,11 +13,36 @@ export const Controls = ({
   play,
   pause,
   loadNewContent,
+  state,
 }: {
   play: () => void;
   pause: () => void;
   loadNewContent: () => void;
   state: PlayingState;
 }) => {
-  return <div></div>;
+  const handlePlayPause: React.MouseEventHandler<HTMLButtonElement> = (event) => {
+    event.preventDefault();
+
+    if (state !== 'playing' && state !== 'ended') {
+      play();
+    }
+    if (state === 'playing') {
+      pause();
+    }
+  }
+
+  const handleLoadNewContent: React.MouseEventHandler<HTMLButtonElement> = (event) => {
+    event.preventDefault();
+
+    if (state === 'playing') {
+      pause();
+    }
+
+    loadNewContent();
+  }
+
+  return <div>
+    <button type='button' onClick={handlePlayPause}>{state === "playing" ? "Pause" : "Play"}</button>
+    <button type='button' onClick={handleLoadNewContent}>Load new content</button>
+  </div>;
 };
