@@ -18,7 +18,9 @@ const useSpeech = (sentences: Array<string>) => {
   const [playbackState, setPlaybackState] = useState<PlayingState>("paused");
 
   const play = useCallback(() => {
-    if (speechEngine) speechEngine.play();
+    if (speechEngine) {
+      speechEngine.play();
+    }
   }, [speechEngine]);
   
   const pause = useCallback(() => {
@@ -31,22 +33,23 @@ const useSpeech = (sentences: Array<string>) => {
   }, []);
 
   const handleOnBoundary = useCallback((e: SpeechSynthesisEvent) => {
-    const currentSentence = sentences[currentSentenceIdx];
+    const currentSentence = e.utterance.text;
 
     if (!currentSentence) return;
 
     const currentCharIndex = e.charIndex;
     const currentWordLength = currentSentence.slice(currentCharIndex).split(" ")[0]?.length;
+    console.log({currentCharIndex, currentWord: currentSentence.slice(currentCharIndex).split(" ")})
 
     setCurrentWordRange([
       currentCharIndex,
       currentCharIndex + currentWordLength,
     ]);
-  }, [sentences, currentSentenceIdx]);
+  }, []);
 
   const handleOnEnd = useCallback((e: SpeechSynthesisEvent) => {
     setCurrentSentenceIdx((prev) => prev + 1);
-  }, []);
+  }, [speechEngine, sentences, currentSentenceIdx]);
 
   const handleOnStateUpdate = useCallback((newState: PlayingState) => {
     setPlaybackState(newState);
@@ -69,9 +72,12 @@ const useSpeech = (sentences: Array<string>) => {
   }, [sentences]);
 
   useEffect(() => {
-    if (speechEngine) {
+    if (speechEngine && sentences.length && sentences[currentSentenceIdx]) {
       speechEngine.load(sentences[currentSentenceIdx]);
     }
+    // if (speechEngine && currentSentenceIdx >= sentences.length) {
+    //   speechEngine?.cancel();
+    // }
   }, [speechEngine, sentences, currentSentenceIdx]);
 
   return {

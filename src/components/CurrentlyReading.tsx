@@ -16,6 +16,7 @@ export const CurrentlyReading = ({
   currentSentenceIdx: number;
   sentences: string[];
 }) => {
+  // console.log({currentWordRange})
 
   const isCurrentWord = (word: string) => {
     const wordIndex = sentences?.[currentSentenceIdx]?.indexOf(word);
@@ -28,13 +29,12 @@ export const CurrentlyReading = ({
       data-testid="current-sentence"
       className="currently-reading-text"
     >
-      {sentences?.[currentSentenceIdx]?.split(" ").map((word, wordIndex) => {
-        const isCurrent = isCurrentWord(word);
+      {sentences?.[currentSentenceIdx]?.split("").map((word, charIndex) => {
+        const isCurrent = charIndex >= currentWordRange[0] && charIndex < currentWordRange[1];
 
         return (
           <>
-            <Word key={`w-${wordIndex}`} highlighted={isCurrent} content={word} />
-            {" "}
+            <Word key={`w-${charIndex}`} highlighted={isCurrent} content={word} />
           </>
         )
       })}
@@ -46,8 +46,8 @@ export const CurrentlyReading = ({
         key={`p-${index}`}
         data-testid={index === currentSentenceIdx ? "current-sentence" : ""}
       >
-
-        {sentence.split(" ").map((word, wordIndex) => {
+        {sentence}
+        {/* {sentence.split(" ").map((word, wordIndex) => {
           // const wordIsBetweenCurrentWordRange = wordIndex >= currentWordRange[0] && wordIndex < currentWordRange[1];
           // const wordIsInCurrentSentence = index === currentSentenceIdx;
           // const wordIsTheCurrentWord = wordIsInCurrentSentence && wordIsBetweenCurrentWordRange;
@@ -58,7 +58,7 @@ export const CurrentlyReading = ({
               {" "}
             </>
           )
-        })}
+        })} */}
       </p>
     ))}
     <br />

@@ -23,10 +23,9 @@ export const Controls = ({
   const handlePlayPause: React.MouseEventHandler<HTMLButtonElement> = (event) => {
     event.preventDefault();
 
-    if (state !== 'playing' && state !== 'ended') {
+    if (state !== 'playing') {
       play();
-    }
-    if (state === 'playing') {
+    } else {
       pause();
     }
   }
